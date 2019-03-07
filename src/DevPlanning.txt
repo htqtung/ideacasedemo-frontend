@@ -1,0 +1,43 @@
+STEPS TO DO TO GET AddCategory to add category and CategoryList to show the update CategoryList
+
+- Install the Redux module...
+    -> react-redux?
+        How to connect React components to Redux
+    -> redux?
+        Redux itself. Works with many libraries/frameworks
+    -> redux-dev-tools
+- Now stuff can be used from there with the import
+- Create one store
+    -> How to create just one store so that all components would get the same store
+        Common files/starting points are index.js and App.js and index.html
+        => import createStore from redux; Provider from react-redux and wrap <Provider> around <App />
+- Redux store then will be build based on reducers
+    -> The reducers' initialStates are used to build the initial Redux store
+        const initialState = {
+            categoryList: [],
+        }
+    -> Name of the reducer file will be name of that "section" or object in the store:
+        src/Reducers/categories.js => store.categories.CategoryList
+- Are components now connected to Redux store? Not at all!
+- CategoryList(a react component, not connected to Redux yet):
+    -> Import some Redux stuff too, e.g. a connect function
+    -> Write the mapStateToProps method for the React component that wants to get data automatically from Redux store state to its props.
+        this.props.categoryList = store.categories.categoryList or this.props.categories = store.categories or sth similar
+    -> use the connect function to connect this component to the Redux, providing also the correct mapStateToProps method to be used when connecting.
+    -> Now CategoryList is connect to Redux, this time only one-way data from store to component
+- CategoryAdd(a react component, not connected to Redux yet):
+    -> src/Actions/ActionTypes: 
+        export const CATEGORY_ADD_REQ = "CATEGORY_ADD_REQ";
+        export const CATEGORY_ADD_OK = "CATEGORY_ADD_OK";
+        export const CATEGORY_ADD_X = "CATEGORY_ADD_X"; //failed
+    -> src/Actions/Category:
+        create action creator function and possibly also a helper function
+        export const categoryAdd_REQ = ... async dispatch(CATEGORY_ADD_REQ(obj)); do async stuff with await later
+    -> write corresponding options to the src/Reducers/Category.js
+    -> add the Category.js reducer to the root reducer, otherwise not in store/Redux
+    -> Import some Redux stuff too, e.g. a connect function
+    -> Write the mapDispatchToProps method for the React component that wants to dispatch actions with possible payload data to  Redux store reducer.
+        import { categoryAdd_REQ } from '../../Actions/Category.js';
+        dispatch(categoryAdd_REQ(categoryObject));
+    -> use the connect function to connect this component to the Redux, providing also the correct mapDispatchToProps method to be used when connecting.
+    -> Now CategoryAdd is connect to Redux, this time only one-way data from component dispatched to (finally) a Redux reducer.
