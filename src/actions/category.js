@@ -1,5 +1,6 @@
 import ActionTypes from "./ActionTypes";
-import { fetchTestCategories } from '../models/TestData';
+// import { fetchTestCategories } from '../models/TestData';
+import API_ROOT from '../constants/AppConstants';
 
 // ACTION CREATORS (Action creator functions)
 export const categoriesAll_REQ = () => ({
@@ -20,13 +21,19 @@ export const categoriesAll_X = () => ({
 export function fetchAllCategories() { 
     return async (dispatch, getState) => {
         dispatch(categoriesAll_REQ());
-        const categoryList = fetchTestCategories();
+        // const categoryList = fetchTestCategories();
+        fetch(API_ROOT + '/category/all')
+            .then(res => res.json())
+            .then(resData => {
+                dispatch(categoriesAll_OK(resData));
+            })
+            .catch(() => dispatch(categoriesAll_X));
         //error simulation
-        if(categoryList.length === 4) {
-            dispatch(categoriesAll_X());
-        } else {
-            dispatch(categoriesAll_OK(categoryList));
-        }
+        // if(categoryList.length === 4) {
+        //     dispatch(categoriesAll_X());
+        // } else {
+        //     dispatch(categoriesAll_OK(categoryList));
+        // }
     }
 };
 
@@ -50,11 +57,19 @@ export function addCategory(category) {
         dispatch(categoryAdd_REQ());
         //Here would be some AJAX call with await...
         //... then some promises or so
-        if( !category.id || !category.name || !category.budget ) {
-            dispatch(categoryAdd_X());
-        } else {
-            dispatch(categoryAdd_OK(category));
-        }
+        fetch(API_ROOT + '/category/add',
+            {
+                method: 'POST',
+                body: category
+            }
+        )
+            .then(() => dispatch(categoryAdd_OK()))
+            .catch(() => dispatch(categoryAdd_X()))
+        // if( !category.id || !category.name || !category.budget ) {
+        //     dispatch(categoryAdd_X());
+        // } else {
+        //     dispatch(categoryAdd_OK(category));
+        // }
     }
 };
 
