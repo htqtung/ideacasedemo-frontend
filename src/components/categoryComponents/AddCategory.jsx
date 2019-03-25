@@ -6,9 +6,9 @@ class AddCategory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 0,
-            name: '',
-            budget: 0,
+                id: 0,
+                name: '',
+                budget: 0
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,11 +21,25 @@ class AddCategory extends Component {
     }
 
     handleSubmit = (event) => {
-        const category = this.state;
+        let category = { 
+            id: this.state.id,
+            name: this.state.name,
+            budget: this.state.budget
+        }
         this.props.addCategoryClicked(category);
+        this.resetInputBox();
         event.preventDefault();
+        
 
         //this.props.addcategoryClicked(this.state);
+    }
+
+    resetInputBox = () => {
+        this.setState({
+            id: 0,
+            name: '',
+            budget: 0
+        })
     }
 
     render() {
@@ -34,15 +48,15 @@ class AddCategory extends Component {
                 <form onSubmit={this.handleSubmit} >
                     <h4>New Category</h4>
                     <label> 
-                        ID: <input id="id" type="text" onChange={this.handleChange} />
+                        ID: <input id="id" type="text" onChange={this.handleChange} value={this.state.id} />
                     </label>
                     <br />
                     <label>
-                        Name: <input id="name" type="text" onChange={this.handleChange} />
+                        Name: <input id="name" type="text" onChange={this.handleChange} value={this.state.name} />
                     </label>
                     <br />
                     <label>
-                        Budget: <input id="budget" type="text" onChange={this.handleChange} />
+                        Budget: <input id="budget" type="text" onChange={this.handleChange} value={this.state.budget} />
                     </label>
                     <br />
                     <input type="submit" value="ADD NEW CATEGORY" />
@@ -53,8 +67,7 @@ class AddCategory extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    addCategoryClicked: (category) => {
-        console.log(category);
+    addCategoryClicked: category => {
         dispatch(addCategory(category));
     },
 });

@@ -52,7 +52,7 @@ export const categoryAdd_X = () => ({
 });
 
 //Helper function, real action function?
-export function addCategory(category) { 
+export function addCategory(category) {
     return async (dispatch, getState) => {
         dispatch(categoryAdd_REQ());
         //Here would be some AJAX call with await...
@@ -60,10 +60,14 @@ export function addCategory(category) {
         fetch(API_ROOT + '/category/add',
             {
                 method: 'POST',
-                body: category
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(category)
             }
         )
-            .then(() => dispatch(categoryAdd_OK()))
+            .then(() => {
+                dispatch(categoryAdd_OK());
+                dispatch(fetchAllCategories());
+            })
             .catch(() => dispatch(categoryAdd_X()))
         // if( !category.id || !category.name || !category.budget ) {
         //     dispatch(categoryAdd_X());
@@ -93,10 +97,22 @@ export function deleteCategory(category) {
         dispatch(categoryDelete_REQ());
         //Here would be some AJAX call with await...
         //... then some promises or so
-        if( !category.id ) {
-            dispatch(categoryDelete_X());
-        } else {
-            dispatch(categoryDelete_OK(category));
-        }
+        fetch(API_ROOT + '/category/delete',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(category)
+            }
+        )
+            .then(() => {
+                dispatch(categoryDelete_OK());
+                dispatch(fetchAllCategories());
+            })
+            .catch(() => dispatch(categoryDelete_X()))
+        // if( !category.id ) {
+        //     dispatch(categoryDelete_X());
+        // } else {
+        //     dispatch(categoryDelete_OK(category));
+        // }
     }
 };

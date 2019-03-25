@@ -40,7 +40,7 @@ export default function categories(state = initialState, action) {
         case ActionTypes.CATEGORY_ADD_OK:
             return {
                 ...state,
-                categoryList: [...state.categoryList, action.category],
+                // categoryList: [...state.categoryList, action.category],
                 isLoading: false,
             }
         
@@ -58,7 +58,7 @@ export default function categories(state = initialState, action) {
         case ActionTypes.CATEGORY_DEL_OK:
             return {
                 ...state,
-                categoryList: state.categoryList.filter(category => category.id != action.category.id),
+                // categoryList: state.categoryList.filter(category => category.id !== action.category.id),
                 isLoading: false,
             }
         
